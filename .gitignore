@@ -23,3 +23,12 @@ dist-ssr
 *.sln
 *.sw?
 .env
+
+terraform/.terraform/
+terraform/terraform.tfstate
+terraform/terraform.tfstate.*
+terraform/.terraform.lock.hcl
+terraform/crash.log
+terraform/override.tf
+terraform/override.tf.json
+*.tfplan
