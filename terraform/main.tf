@@ -9,24 +9,20 @@ resource "aws_security_group" "web_sg" {
   name        = "web_sg"
   description = "Allow HTTP and SSH traffic"
 
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"] # Allow SSH from anywhere (not recommended for production)
-  }
-    ingress {
-        from_port   = 80
-        to_port     = 80
-        protocol    = "tcp"
-        cidr_blocks = ["0.0.0.0/0"] # Allow HTTP from anywhere
+  dynamic "ingress" {
+    for_each =  [80, 22, 443, 8080, 9000, 3000]
+    content {
+      from_port   = ingress.value
+      to_port     = ingress.value
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"] # Allow SSH from anywhere (not recommended for production)
+      ipv6_cidr_blocks = []
+      prefix_list_ids = []
+      security_groups = []
+      self = false
     }
-    ingress {
-        from_port   = 5173
-        to_port     = 5173
-        protocol    = "tcp"
-        cidr_blocks = ["0.0.0.0/0"] # Allow HTTP from anywhere
-    }
+}
+
     egress {
         from_port   = 0
         to_port     = 0
@@ -36,17 +32,18 @@ resource "aws_security_group" "web_sg" {
 }
 
 resource "aws_instance" "webpage" {
-  ami           = "ami-0f535a71b34f2d44a" # Example AMI, replace with a valid one for your region
-  instance_type = "t2.micro"
+  ami             = "ami-02521d90e7410d9f0" # Example AMI, replace with a valid one for your region
+  instance_type   = "t2.large" # Change to your desired instance type
   security_groups = [aws_security_group.web_sg.name]
-
+  key_name        = "windows" # Replace with your key pair name
+  user_data       = templatefile("./install.sh", {})
   root_block_device {
     volume_size = 30
     volume_type = "gp2"
   }
 
   tags = {
-    Name = "ExampleInstance"
+    Name = "jenkins-ci-cd"
   }
 }
 
