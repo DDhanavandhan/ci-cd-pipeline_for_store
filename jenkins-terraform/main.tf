@@ -37,6 +37,7 @@ resource "aws_instance" "webpage" {
   security_groups = [aws_security_group.web_sg.name]
   key_name        = "windows" # Replace with your key pair name
   user_data       = templatefile("./install.sh", {})
+  iam_instance_profile =  "ec2-admin-role"
   root_block_device {
     volume_size = 30
     volume_type = "gp2"
