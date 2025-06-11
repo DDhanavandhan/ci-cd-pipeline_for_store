@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: store-web-page
+  labels:
+    app: store-web-page
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 3000
+  selector:
+    app: store-web-page

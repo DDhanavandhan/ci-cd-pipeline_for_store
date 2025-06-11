@@ -48,3 +48,9 @@ curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/d
 cd /tmp
 sudo mv /tmp/eksctl /bin
 eksctl version
+
+#install helm
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
+chmod 700 get_helm.sh
+./get_helm.sh
+helm version
