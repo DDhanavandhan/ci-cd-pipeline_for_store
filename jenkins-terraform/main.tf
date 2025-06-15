@@ -31,13 +31,15 @@ resource "aws_security_group" "web_sg" {
     }
 }
 
+
+
 resource "aws_instance" "webpage" {
   ami             = "ami-02521d90e7410d9f0" # Example AMI, replace with a valid one for your region
   instance_type   = "t2.large" # Change to your desired instance type
   security_groups = [aws_security_group.web_sg.name]
   key_name        = "windows" # Replace with your key pair name
   user_data       = templatefile("./install.sh", {})
-  iam_instance_profile =  "ec2-admin-role"
+
   root_block_device {
     volume_size = 30
     volume_type = "gp2"
